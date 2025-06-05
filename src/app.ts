@@ -1,12 +1,32 @@
 import express from "express";
-import userRouter from "./routes/user";
+import userRouter from "./routes/user.route";
+import db from "./utils/database";
 
-const app = express();
-const PORT = 3001;
+async function init() {
+  try {
+    const result = await db();
 
-app.use(express.json());
-app.use("/user", userRouter);
+    console.log("database status: ", result);
 
-app.listen(PORT, () => {
-  console.log(`server is running on http://localhost:${PORT}`);
-});
+    const app = express();
+    const PORT = 3001;
+
+    app.get("/", (req, res) => {
+      res.status(200).json({
+        message: "Server is running",
+        data: null,
+      });
+    });
+
+    app.use(express.json());
+    app.use("/user", userRouter);
+
+    app.listen(PORT, () => {
+      console.log(`server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+init();
