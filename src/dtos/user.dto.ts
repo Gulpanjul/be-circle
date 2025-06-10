@@ -1,3 +1,12 @@
-import { User } from "@prisma/client";
+import { Profile, User } from "@prisma/client";
 
-export type TCreateUserDTO = Pick<User, "email" | "username" | "password">;
+type TUserProfile = User & {
+  fullName: Profile["fullName"];
+};
+
+export type TCreateUserDTO = Pick<
+  TUserProfile,
+  "email" | "username" | "password" | "fullName"
+>;
+
+export type TUpdateUserDTO = Pick<TUserProfile, "email" | "username">;
