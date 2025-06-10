@@ -1,5 +1,6 @@
 import express from "express";
 import userRouter from "./routes/user.route";
+import authRouter from "./routes/auth.route";
 import db from "./utils/database";
 
 async function init() {
@@ -19,6 +20,7 @@ async function init() {
     });
 
     app.use(express.json());
+    app.use("/auth", authRouter);
     app.use("/user", userRouter);
 
     app.listen(PORT, () => {
