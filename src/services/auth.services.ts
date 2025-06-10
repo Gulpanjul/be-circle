@@ -14,6 +14,12 @@ class AuthService {
       },
     });
   }
+  async resetPassword(email: string, hashedNewPassword: string) {
+    return await prisma.user.update({
+      where: { email },
+      data: { password: hashedNewPassword },
+    });
+  }
 }
 
 export default new AuthService();

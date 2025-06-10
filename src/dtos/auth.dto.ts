@@ -10,3 +10,10 @@ export type RegisterDTO = Pick<
 >;
 
 export type LoginDTO = Pick<User, "email" | "password">;
+
+export type ForgotPasswordDTO = Pick<User, "email">;
+
+export type ResetPasswordDTO = {
+  oldPassword: string;
+  newPassword: string;
+};
