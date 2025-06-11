@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 import {
   NODEMAILER_SMTP_HOST,
   NODEMAILER_SMTP_PORT,
@@ -6,7 +6,7 @@ import {
   NODEMAILER_SMTP_SERVICE_NAME,
   NODEMAILER_USER_EMAIL,
   NODEMAILER_USER_PASSWORD,
-} from "../utils/env";
+} from '../utils/env';
 
 const user = NODEMAILER_USER_EMAIL;
 const pass = NODEMAILER_USER_PASSWORD;

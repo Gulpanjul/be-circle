@@ -1,10 +1,10 @@
-import Joi from "joi";
+import Joi from 'joi';
 import {
   ForgotPasswordDTO,
   LoginDTO,
   RegisterDTO,
   ResetPasswordDTO,
-} from "../../dtos/auth.dto";
+} from '../../dtos/auth.dto';
 
 export const loginSchema = Joi.object<LoginDTO>({
   email: Joi.string().email().required(),

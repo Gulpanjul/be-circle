@@ -1,5 +1,5 @@
-import { TCreateUserDTO, TUpdateUserDTO } from "../dtos/user.dto";
-import { prisma } from "../prisma/client";
+import { TCreateUserDTO, TUpdateUserDTO } from '../dtos/user.dto';
+import { prisma } from '../prisma/client';
 
 class UserService {
   async getUsers() {

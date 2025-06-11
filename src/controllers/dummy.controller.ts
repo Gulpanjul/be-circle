@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { dummyList, Dummy } from "../models/dummy";
+import { Request, Response } from 'express';
+import { dummyList, Dummy } from '../models/dummy';
 
 export default {
   readUsers: (req: Request, res: Response) => {
@@ -25,12 +25,12 @@ export default {
     const userIndex = dummyList.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {
-      res.status(404).json({ message: "User is not found" });
+      res.status(404).json({ message: 'User is not found' });
       return;
     }
 
     const updates = Object.fromEntries(
-      Object.entries({ username, email, password }).filter(([_, v]) => v)
+      Object.entries({ username, email, password }).filter(([_, v]) => v),
     );
 
     dummyList[userIndex] = {
@@ -38,7 +38,7 @@ export default {
       ...updates,
     };
     res.status(200).json({
-      message: "Blog has been update",
+      message: 'Blog has been update',
       data: dummyList[userIndex],
     });
   },
@@ -48,11 +48,11 @@ export default {
     const userIndex = dummyList.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {
-      res.status(404).json({ message: "User is not found" });
+      res.status(404).json({ message: 'User is not found' });
       return;
     }
 
     dummyList.splice(userIndex, 1);
-    res.status(200).json({ message: "User has been delete" });
+    res.status(200).json({ message: 'User has been delete' });
   },
 };

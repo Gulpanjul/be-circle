@@ -1,14 +1,24 @@
-import { Request, Response, NextFunction } from "express";
-import Jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from 'express';
+import Jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../utils/env';
 
 export function authCheck(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers["authorization"] || "";
-  const jwtSecret = process.env.JWT || "";
+  /** #swagger.security = [{
+   * "bearerAuth":[]
+   * }]
+   * */
+  let token = req.headers['authorization'] || '';
+
+  if (token.split(' ').length > 1) {
+    token = token.split(' ')[1];
+  }
+
+  const jwtSecret = JWT_SECRET;
   const user = Jwt.verify(token, jwtSecret);
 
   if (!user) {
     res.status(401).json({
-      message: "Unauthorized!",
+      message: 'Unauthorized!',
       data: null,
     });
     return;

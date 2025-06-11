@@ -1,5 +1,5 @@
-import { LoginDTO, RegisterDTO } from "../dtos/auth.dto";
-import { prisma } from "../prisma/client";
+import { LoginDTO, RegisterDTO } from '../dtos/auth.dto';
+import { prisma } from '../prisma/client';
 
 class AuthService {
   async register(data: RegisterDTO) {
