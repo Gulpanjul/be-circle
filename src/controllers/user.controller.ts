@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import UserService from '../services/user.service';
 import {
   createUserSchema,
@@ -7,7 +7,7 @@ import {
 import userServices from '../services/user.service';
 
 class UserController {
-  async getUsers(req: Request, res: Response) {
+  async getUsers(req: Request, res: Response, next: NextFunction) {
     /**
      #swagger.tags =['Users']
      */
@@ -18,14 +18,10 @@ class UserController {
         data: users,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async getUserById(req: Request, res: Response) {
+  async getUserById(req: Request, res: Response, next: NextFunction) {
     /**
      #swagger.tags =['Users']
      */
@@ -45,14 +41,10 @@ class UserController {
         data: user,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async getUserByEmail(req: Request, res: Response) {
+  async getUserByEmail(req: Request, res: Response, next: NextFunction) {
     /**
      #swagger.tags =['Users']
      */
@@ -80,14 +72,10 @@ class UserController {
         data: user,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async createUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response, next: NextFunction) {
     /**
      #swagger.tags =['Users']
      */
@@ -101,14 +89,10 @@ class UserController {
         data: user,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async updateUserById(req: Request, res: Response) {
+  async updateUserById(req: Request, res: Response, next: NextFunction) {
     /**
      #swagger.tags =['Users']
      */
@@ -141,14 +125,10 @@ class UserController {
         data: updatedUser,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async deleteUserById(req: Request, res: Response) {
+  async deleteUserById(req: Request, res: Response, next: NextFunction) {
     /**
       #swagger.tags =['Users']
      */
@@ -160,11 +140,7 @@ class UserController {
         data: null,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
 }

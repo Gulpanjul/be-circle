@@ -2,6 +2,7 @@ import express from 'express';
 import routes from './routes';
 import db from './utils/database';
 import docs from './swagger/routes';
+import { errorHandler } from './middlewares/error.middleware';
 
 async function init() {
   try {
@@ -21,6 +22,7 @@ async function init() {
 
     app.use(express.json());
     app.use(routes);
+    app.use(errorHandler);
     docs(app);
 
     app.listen(PORT, () => {

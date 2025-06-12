@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import authServices from '../services/auth.service';
 import userServices from '../services/user.service';
 import {
@@ -14,7 +14,7 @@ import { FRONTEND_BASE_URL, NODEMAILER_USER_EMAIL } from '../utils/env';
 import { transporter } from '../libs/nodemailer';
 
 class AuthController {
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
     #swagger.requestBody = {
@@ -53,19 +53,18 @@ class AuthController {
 
       const token = signToken(user.id);
 
+      const { password: unusedPassword, ...userResponse } = user;
+
       res.status(200).json({
         message: 'Login success',
-        data: token,
+        data: userResponse,
+        token: token,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async register(req: Request, res: Response) {
+  async register(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
     #swagger.requestBody = {
@@ -93,36 +92,38 @@ class AuthController {
 
       res.status(200).json({
         message: 'Register Success',
-        data: user,
+        data: { ...user },
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async check(req: Request, res: Response) {
+  async check(req: Request, res: Response, next: NextFunction) {
     /**
      * #swagger.tags =['Auth']
      */
     const payload = (req as any).user;
     try {
       const user = await userServices.getUserById(payload.id);
+
+      if (!user) {
+        res.status(404).json({
+          message: 'User not found!',
+        });
+        return;
+      }
+
+      const { password: unusedPassword, ...userResponse } = user;
+
       res.status(200).json({
         message: 'Authentication successful',
-        data: user,
+        data: { ...userResponse },
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async forgotPassword(req: Request, res: Response) {
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
     #swagger.requestBody = {
@@ -161,14 +162,10 @@ class AuthController {
         data: email,
       });
     } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
-      });
+      next(error);
     }
   }
-  async resetPassword(req: Request, res: Response) {
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
     #swagger.requestBody = {
@@ -227,17 +224,15 @@ class AuthController {
       }
 
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-      const updatedUserPassword = await authServices.resetPassword(
-        user.email,
-        hashedNewPassword,
-      );
-      res.send(updatedUserPassword);
-    } catch (error) {
-      const err = error as unknown as Error;
-      res.status(400).json({
-        message: err.message,
-        data: null,
+      const { password, ...updatedUserPassword } =
+        await authServices.resetPassword(user.email, hashedNewPassword);
+
+      res.status(200).json({
+        message: 'Reset password success!',
+        data: { ...updatedUserPassword },
       });
+    } catch (error) {
+      next(error);
     }
   }
 }
