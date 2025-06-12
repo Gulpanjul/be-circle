@@ -38,15 +38,20 @@ class ThreadController {
   async createThread(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Threads']
-    #swagger.requestBody = {
+    #swagger.security = [{ bearerAuth: [] }]
+    #swagger.consumes = ['multipart/form-data']
+    #swagger.parameters['content'] = {
+      in: 'formData',
+      name: 'content',
+      type: 'string',
       required: true,
-      content: {
-        "multipart/form-data": {
-          schema: {
-            $ref: "#/components/schemas/CreateThreadDTO"
-          }
-        }
-      }
+      example: 'This is my thread content'
+    }
+    #swagger.parameters['images'] = {
+      in: 'formData',
+      name: 'images',
+      type: 'file',
+      description: 'Image file to upload'
     }
     */
     const filePath = req.file?.path;

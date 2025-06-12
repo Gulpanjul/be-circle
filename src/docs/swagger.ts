@@ -13,6 +13,14 @@ const doc = {
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Bearer token for authenticated users (ID-based)',
+      },
+      bearerReset: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Bearer token for password reset (email-based)',
       },
     },
     schemas: {
@@ -48,9 +56,15 @@ const doc = {
       CreateThreadDTO: {
         type: 'object',
         properties: {
-          content: { type: 'string' },
-          image: { type: 'file' },
+          content: {
+            type: 'string',
+          },
+          images: {
+            type: 'string',
+            format: 'binary',
+          },
         },
+        required: ['content'],
       },
     },
   },

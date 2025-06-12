@@ -14,20 +14,88 @@ import { FRONTEND_BASE_URL, NODEMAILER_USER_EMAIL } from '../utils/env';
 import { transporter } from '../libs/nodemailer';
 
 class AuthController {
-  async login(req: Request, res: Response, next: NextFunction) {
+  async register(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
+    #swagger.description = 'Register user with fullname, email, username and password'
+    #swagger.consumes = ['application/json']
     #swagger.requestBody = {
       required: true,
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/LoginDTO"
+            type: 'object',
+            properties: {
+              fullName: {
+                type: 'string',
+                example: 'admin'
+              },
+              email: {
+                type: 'string',
+                example: 'admin@mail.com'
+              },
+              username: {
+                type: 'string',
+                example: 'Admin'
+              },
+              password: {
+                type: 'string',
+                example: 'admin1234'
+              }
+            },
+            required: ['fullName', 'email', 'username', 'password']
           }
         }
       }
     }
     */
+    const body = req.body;
+    try {
+      const validatedBody = await registerSchema.validateAsync(body);
+      const hashedPassword = await bcrypt.hash(validatedBody.password, 10);
+
+      const registerBody: RegisterDTO = {
+        ...validatedBody,
+        password: hashedPassword,
+      };
+
+      const user = await authServices.register(registerBody);
+
+      res.status(200).json({
+        message: 'Register Success',
+        data: { ...user },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async login(req: Request, res: Response, next: NextFunction) {
+    /**
+  #swagger.tags = ['Auth']
+  #swagger.description = 'Login user with email and password'
+  #swagger.consumes = ['application/json']
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              example: 'admin@mail.com'
+            },
+            password: {
+              type: 'string',
+              example: 'admin1234'
+            }
+          },
+          required: ['email', 'password']
+        }
+      }
+    }
+  }
+  */
     const body = req.body;
     try {
       const { email, password } = await loginSchema.validateAsync(body);
@@ -64,43 +132,10 @@ class AuthController {
       next(error);
     }
   }
-  async register(req: Request, res: Response, next: NextFunction) {
-    /**
-    #swagger.tags = ['Auth']
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        "application/json": {
-          schema: {
-            $ref: "#/components/schemas/RegisterDTO"
-          }
-        }
-      }
-    }
-    */
-    const body = req.body;
-    try {
-      const validatedBody = await registerSchema.validateAsync(body);
-      const hashedPassword = await bcrypt.hash(validatedBody.password, 10);
-
-      const registerBody: RegisterDTO = {
-        ...validatedBody,
-        password: hashedPassword,
-      };
-
-      const user = await authServices.register(registerBody);
-
-      res.status(200).json({
-        message: 'Register Success',
-        data: { ...user },
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
   async check(req: Request, res: Response, next: NextFunction) {
     /**
-     * #swagger.tags =['Auth']
+    #swagger.tags = ['Auth']
+    #swagger.security = [{ bearerAuth: [] }]
      */
     const payload = (req as any).user;
     try {
@@ -126,18 +161,26 @@ class AuthController {
   async forgotPassword(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
+    #swagger.description = 'Send token Forgot-Password to email'
+    #swagger.consumes = ['application/json']
     #swagger.requestBody = {
       required: true,
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/ForgotPasswordDTO"
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                example: 'admin@mail.com'
+              },
+            },
+            required: ['email']
           }
         }
       }
     }
     */
-
     const body = req.body;
     try {
       const { email } = await forgotPasswordSchema.validateAsync(body);
@@ -168,12 +211,26 @@ class AuthController {
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Auth']
+    #swagger.description = 'Reset password by using token'
+    #swagger.security = [{ bearerReset: [] }]
+    #swagger.consumes = ['application/json']
     #swagger.requestBody = {
       required: true,
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/ResetPasswordDTO"
+            type: 'object',
+            properties: {
+              oldPassword: {
+                type: 'string',
+                example: 'admin1234'
+              },
+              newPassword: {
+                type: 'string',
+                example: 'admin1234'
+              },
+            },
+            required: ['oldPassword', 'newPassword']
           }
         }
       }

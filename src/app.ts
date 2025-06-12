@@ -1,7 +1,7 @@
 import express from 'express';
 import routes from './routes';
 import db from './utils/database';
-import docs from './swagger/routes';
+import docs from './docs/routes';
 import { errorHandler } from './middlewares/error.middleware';
 
 async function init() {
