@@ -19,48 +19,37 @@ const doc = {
       LoginDTO: {
         type: 'object',
         properties: {
-          email: {
-            type: 'string',
-          },
-          password: {
-            type: 'string',
-          },
+          email: { type: 'string' },
+          password: { type: 'string' },
         },
       },
       RegisterDTO: {
         type: 'object',
         properties: {
-          fullName: {
-            type: 'string',
-          },
-          username: {
-            type: 'string',
-          },
-          email: {
-            type: 'string',
-          },
-          password: {
-            type: 'string',
-          },
+          fullName: { type: 'string' },
+          username: { type: 'string' },
+          email: { type: 'string' },
+          password: { type: 'string' },
         },
       },
       ForgotPasswordDTO: {
         type: 'object',
         properties: {
-          email: {
-            type: 'string',
-          },
+          email: { type: 'string' },
         },
       },
       ResetPasswordDTO: {
         type: 'object',
         properties: {
-          oldPassword: {
-            type: 'string',
-          },
-          newPassword: {
-            type: 'string',
-          },
+          oldPassword: { type: 'string' },
+          newPassword: { type: 'string' },
+        },
+      },
+      CreateThreadDTO: {
+        type: 'object',
+        properties: {
+          content: { type: 'string' },
+          image: { type: 'file' },
         },
       },
     },

@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import UserService from '../services/user.services';
+import UserService from '../services/user.service';
 import {
   createUserSchema,
   updateUserSchema,
-} from '../utils/schemas/user.schema';
-import userServices from '../services/user.services';
+} from '../validations/user.validation';
+import userServices from '../services/user.service';
 
 class UserController {
   async getUsers(req: Request, res: Response) {
     /**
-     #swagger.tags =['User']
+     #swagger.tags =['Users']
      */
     try {
       const users = await UserService.getUsers();
@@ -27,7 +27,7 @@ class UserController {
   }
   async getUserById(req: Request, res: Response) {
     /**
-     #swagger.tags =['User']
+     #swagger.tags =['Users']
      */
     const { id } = req.params;
     try {
@@ -54,7 +54,7 @@ class UserController {
   }
   async getUserByEmail(req: Request, res: Response) {
     /**
-     #swagger.tags =['User']
+     #swagger.tags =['Users']
      */
     const { email } = req.params;
     if (!email) {
@@ -89,7 +89,7 @@ class UserController {
   }
   async createUser(req: Request, res: Response) {
     /**
-     #swagger.tags =['User']
+     #swagger.tags =['Users']
      */
     const body = req.body;
     try {
@@ -110,7 +110,7 @@ class UserController {
   }
   async updateUserById(req: Request, res: Response) {
     /**
-     #swagger.tags =['User']
+     #swagger.tags =['Users']
      */
     const { id } = req.params;
     const body = req.body;
@@ -150,7 +150,7 @@ class UserController {
   }
   async deleteUserById(req: Request, res: Response) {
     /**
-      #swagger.tags =['User']
+      #swagger.tags =['Users']
      */
     const { id } = req.params;
     try {

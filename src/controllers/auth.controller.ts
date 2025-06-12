@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import authServices from '../services/auth.services';
-import userServices from '../services/user.services';
+import authServices from '../services/auth.service';
+import userServices from '../services/user.service';
 import {
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
   resetPasswordSchema,
-} from '../utils/schemas/auth.schema';
+} from '../validations/auth.validation';
 import bcrypt from 'bcrypt';
-import { RegisterDTO } from '../dtos/auth.dto';
+import { RegisterDTO } from '../types/auth.dto';
 import { forgotToken, signToken } from '../utils/jwt';
 import { FRONTEND_BASE_URL, NODEMAILER_USER_EMAIL } from '../utils/env';
 import { transporter } from '../libs/nodemailer';

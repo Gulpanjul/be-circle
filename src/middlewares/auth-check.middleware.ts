@@ -3,10 +3,11 @@ import Jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../utils/env';
 
 export function authCheck(req: Request, res: Response, next: NextFunction) {
-  /** #swagger.security = [{
-   * "bearerAuth":[]
-   * }]
-   * */
+  /** 
+  #swagger.security = [{
+    "bearerAuth":[]
+  }]
+  */
   let token = req.headers['authorization'] || '';
 
   if (token.split(' ').length > 1) {

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { TCreateUserDTO, TUpdateUserDTO } from '../../dtos/user.dto';
+import { TCreateUserDTO, TUpdateUserDTO } from '../types/user.dto';
 
 export const createUserSchema = Joi.object<TCreateUserDTO>({
   fullName: Joi.string().max(100).required(),

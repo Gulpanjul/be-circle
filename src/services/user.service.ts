@@ -1,4 +1,4 @@
-import { TCreateUserDTO, TUpdateUserDTO } from '../dtos/user.dto';
+import { TCreateUserDTO, TUpdateUserDTO } from '../types/user.dto';
 import { prisma } from '../prisma/client';
 
 class UserService {
