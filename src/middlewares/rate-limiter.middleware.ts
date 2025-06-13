@@ -7,7 +7,7 @@ const likeLimiter = rateLimit({
 });
 
 const threadLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
+  windowMs: 5 * 60 * 1000,
   limit: 100,
   message: 'Too many request, please try again later',
 });
