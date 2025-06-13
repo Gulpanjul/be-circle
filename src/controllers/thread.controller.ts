@@ -3,17 +3,29 @@ import threadService from '../services/thread.service';
 import { createThreadSchema } from '../validations/thread.validation';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
+import likeService from '../services/like.service';
 
 class ThreadController {
   async getThreads(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags =['Threads']
     */
+    const userId = (req as any).user.id;
     try {
       const threads = await threadService.getThreads();
+
+      const newThreads = await Promise.all(
+        threads.map(async (thread) => {
+          const like = await likeService.getLikeById(userId, thread.id);
+          const isLiked = like ? true : false;
+          const likesCount = thread.likes.length;
+
+          return { ...thread, likesCount, isLiked };
+        }),
+      );
       res.status(200).json({
         message: 'Threads retrieved successfully',
-        data: threads,
+        data: newThreads,
       });
     } catch (error) {
       next(error);

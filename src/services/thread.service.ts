@@ -9,6 +9,7 @@ class ThreadService {
           omit: { password: true },
           include: { profile: true },
         },
+        likes: true,
       },
       orderBy: { createdAt: 'desc' },
     });

@@ -9,10 +9,11 @@ import userServices from '../services/user.service';
 class UserController {
   async getUsers(req: Request, res: Response, next: NextFunction) {
     /**
-     #swagger.tags =['Users']
+    #swagger.tags =['Users']
      */
+    const search = req.query.search as string;
     try {
-      const users = await UserService.getUsers();
+      const users = await UserService.getUsers(search);
       res.status(200).json({
         message: 'Users retrieved successfully',
         data: users,
@@ -23,7 +24,7 @@ class UserController {
   }
   async getUserById(req: Request, res: Response, next: NextFunction) {
     /**
-     #swagger.tags =['Users']
+    #swagger.tags =['Users']
      */
     const { id } = req.params;
     try {
@@ -46,7 +47,7 @@ class UserController {
   }
   async getUserByEmail(req: Request, res: Response, next: NextFunction) {
     /**
-     #swagger.tags =['Users']
+    #swagger.tags =['Users']
      */
     const { email } = req.params;
     if (!email) {
@@ -77,7 +78,7 @@ class UserController {
   }
   async createUser(req: Request, res: Response, next: NextFunction) {
     /**
-     #swagger.tags =['Users']
+    #swagger.tags =['Users']
      */
     const body = req.body;
     try {
@@ -94,7 +95,7 @@ class UserController {
   }
   async updateUserById(req: Request, res: Response, next: NextFunction) {
     /**
-     #swagger.tags =['Users']
+    #swagger.tags =['Users']
      */
     const { id } = req.params;
     const body = req.body;
@@ -130,8 +131,8 @@ class UserController {
   }
   async deleteUserById(req: Request, res: Response, next: NextFunction) {
     /**
-      #swagger.tags =['Users']
-     */
+    #swagger.tags =['Users']
+    */
     const { id } = req.params;
     try {
       const user = await userServices.deleteUserById(id);
