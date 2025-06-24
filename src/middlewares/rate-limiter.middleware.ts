@@ -1,21 +1,23 @@
-import rateLimit from 'express-rate-limit';
-import { RedisStore } from 'rate-limit-redis';
-import RedisClient from 'ioredis';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
+import { NextFunction, Request, Response } from 'express';
 
-const client = new RedisClient();
+export function rateLimit(identifier: string) {
+  const ratelimit = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(10, '10 s'),
+  });
 
-export const likeLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  limit: 100,
-  message: 'Too many request, please try again later',
-  store: new RedisStore({
-    sendCommand: (...args: [string, ...string[]]) =>
-      client.call(...args) as unknown as Promise<any>,
-  }),
-});
+  return async function (req: Request, res: Response, next: NextFunction) {
+    const { success } = await ratelimit.limit(identifier);
 
-export const threadLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000,
-  limit: 100,
-  message: 'Too many request, please try again later',
-});
+    if (!success) {
+      res.status(429).json({
+        message: 'Too many requests',
+        data: null,
+      });
+      return;
+    }
+    next();
+  };
+}

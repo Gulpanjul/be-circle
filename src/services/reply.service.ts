@@ -1,5 +1,5 @@
-import { CreateReplyDTO } from '../types/reply.dto';
 import { prisma } from '../prisma/client';
+import { CreateReplyDTO } from '../types/reply.dto';
 
 class ReplyService {
   async getRepliesByThreadId(threadId: string) {

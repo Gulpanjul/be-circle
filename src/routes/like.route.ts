@@ -1,7 +1,8 @@
 import express from 'express';
+
 import likeController from '../controllers/like.controller';
-import { likeLimiter } from '../middlewares/rate-limiter.middleware';
 import { authenticate } from '../middlewares/auth.middleware';
+import { likeLimiter } from '../middlewares/rate-limiter.middleware';
 
 const router = express.Router();
 

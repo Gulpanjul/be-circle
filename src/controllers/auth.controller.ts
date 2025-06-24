@@ -1,17 +1,18 @@
+import bcrypt from 'bcrypt';
 import { Request, Response, NextFunction } from 'express';
+
+import { transporter } from '../libs/nodemailer';
 import authServices from '../services/auth.service';
 import userServices from '../services/user.service';
+import { RegisterDTO } from '../types/auth.dto';
+import { FRONTEND_BASE_URL, NODEMAILER_USER_EMAIL } from '../utils/env';
+import { forgotToken, signToken } from '../utils/jwt';
 import {
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
   resetPasswordSchema,
 } from '../validations/auth.validation';
-import bcrypt from 'bcrypt';
-import { RegisterDTO } from '../types/auth.dto';
-import { forgotToken, signToken } from '../utils/jwt';
-import { FRONTEND_BASE_URL, NODEMAILER_USER_EMAIL } from '../utils/env';
-import { transporter } from '../libs/nodemailer';
 
 class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {

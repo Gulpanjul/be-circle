@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 import {
   NODEMAILER_SMTP_HOST,
   NODEMAILER_SMTP_PORT,

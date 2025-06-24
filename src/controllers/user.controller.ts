@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+
 import UserService from '../services/user.service';
+import userServices from '../services/user.service';
 import {
   createUserSchema,
   updateUserSchema,
 } from '../validations/user.validation';
-import userServices from '../services/user.service';
 
 class UserController {
   async getUsers(req: Request, res: Response, next: NextFunction) {

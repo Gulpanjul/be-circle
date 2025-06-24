@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Jwt from 'jsonwebtoken';
+
 import { JWT_SECRET } from '../utils/env';
 
 export function authCheck(req: Request, res: Response, next: NextFunction) {

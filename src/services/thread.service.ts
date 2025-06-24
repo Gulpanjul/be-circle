@@ -1,5 +1,6 @@
-import { CreateThreadDTO } from '../types/thread.dto';
 import { prisma } from '../prisma/client';
+import { CreateThreadDTO } from '../types/thread.dto';
+
 class ThreadService {
   async getThreads(pagination?: { limit: number; startIndex: number }) {
     return await prisma.thread.findMany({

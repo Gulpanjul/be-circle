@@ -1,10 +1,12 @@
-import e, { Request, Response, NextFunction } from 'express';
+import fs from 'fs';
+import path from 'path';
+
+import { v2 as cloudinary } from 'cloudinary';
+import { Request, Response, NextFunction } from 'express';
+
+import likeService from '../services/like.service';
 import threadService from '../services/thread.service';
 import { createThreadSchema } from '../validations/thread.validation';
-import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
-import likeService from '../services/like.service';
-import path from 'path';
 
 class ThreadController {
   async getThreads(req: Request, res: Response, next: NextFunction) {

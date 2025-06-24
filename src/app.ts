@@ -1,9 +1,10 @@
 import express from 'express';
+
+import docs from './docs/routes';
+import corsMiddleware from './middlewares/cors.middleware';
+import { errorHandler } from './middlewares/error.middleware';
 import routes from './routes';
 import db from './utils/database';
-import docs from './docs/routes';
-import { errorHandler } from './middlewares/error.middleware';
-import corsMiddleware from './middlewares/cors.middleware';
 
 async function init() {
   try {

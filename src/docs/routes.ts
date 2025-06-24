@@ -1,5 +1,6 @@
-import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
+import swaggerUi from 'swagger-ui-express';
+
 import swaggerOutput from './swagger-output.json'; // ganti dengan path kamu jika berbeda
 
 export default function docs(app: Express) {

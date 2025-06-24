@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { Request, Response, NextFunction } from 'express';
+
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,

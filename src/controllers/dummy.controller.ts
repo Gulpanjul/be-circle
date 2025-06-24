@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { dummyList, Dummy } from '../models/dummy';
 
 export default {

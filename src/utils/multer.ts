@@ -1,5 +1,6 @@
-import multer from 'multer';
 import path from 'path';
+
+import multer from 'multer';
 
 const whitelist = ['image/png', 'image/jpeg', 'image/jpg'];
 
