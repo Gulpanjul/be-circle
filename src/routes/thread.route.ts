@@ -6,8 +6,8 @@ import { uploadImage } from '../utils/multer';
 
 const router = express.Router();
 
-router.get('/', threadController.getThreads);
-router.get('/:id', threadController.getThreadById);
+router.get('/', authenticate, threadController.getThreads);
+router.get('/:id', authenticate, threadController.getThreadById);
 router.post(
   '/',
   authenticate,

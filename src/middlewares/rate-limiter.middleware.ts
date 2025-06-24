@@ -4,18 +4,18 @@ import { NextFunction, Request, Response } from 'express';
 
 export function rateLimit(identifier: string) {
   return async function (req: Request, res: Response, next: NextFunction) {
-    const redis = Redis.fromEnv();
+    // const redis = Redis.fromEnv();
 
-    async function testRedisConnection() {
-      try {
-        const response = await redis.ping();
-        console.log('✅ Redis connected:', response);
-      } catch (err) {
-        console.error('❌ Redis connection failed:', err);
-      }
-    }
+    // async function testRedisConnection() {
+    //   try {
+    //     const response = await redis.ping();
+    //     console.log('✅ Redis connected:', response);
+    //   } catch (err) {
+    //     console.error('❌ Redis connection failed:', err);
+    //   }
+    // }
 
-    testRedisConnection();
+    // testRedisConnection();
 
     const ratelimit = new Ratelimit({
       redis: Redis.fromEnv(),
