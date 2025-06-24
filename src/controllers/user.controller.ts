@@ -25,7 +25,7 @@ class UserController {
     /**
     #swagger.tags =['Users']
      */
-    const q = req.query.search as string;
+    const q = req.query.q as string;
     try {
       if (!q.trim()) {
         res.json({ message: 'no data' });

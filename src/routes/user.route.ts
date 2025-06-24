@@ -4,7 +4,7 @@ import UserController from '../controllers/user.controller';
 const router = express.Router();
 
 router.get('/', UserController.getUsers);
-router.get('/email/:email', UserController.getUserByEmail);
+router.get('/search', UserController.getUsersSearch);
 router.get('/:id', UserController.getUserById);
 router.post('/', UserController.createUser);
 router.patch('/:id', UserController.updateUserById);

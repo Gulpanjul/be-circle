@@ -47,12 +47,26 @@ class ThreadController {
     #swagger.tags =['Threads']
     */
     const { id } = req.params;
+    const userId = (req as any).user.id;
     try {
       const thread = await threadService.getThreadById(id);
 
+      if (!thread) {
+        res.status(404).json({
+          message: 'Thread not found!',
+          data: null,
+        });
+        return;
+      }
+
+      const like = await likeService.getLikeById(userId, thread.id);
+      const isLiked = like ? true : false;
+      const likesCount = thread.likes.length;
+      const repliesCount = thread.replies.length;
+
       res.status(200).json({
         message: 'Threads retrieved successfully',
-        data: thread,
+        data: { ...thread, likesCount, repliesCount, isLiked },
       });
     } catch (error) {
       next(error);
