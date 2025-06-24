@@ -12,10 +12,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Backend Circle App</h3>
+<h3 align="center">BE Circle</h3>
 
   <p align="center">
     The backend for cicle app
@@ -23,11 +23,9 @@
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    &middot;
+    <a href="#">View Demo</a>
+    •
     <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -141,12 +139,40 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+### Auth Endpoint
+  - [x] Auth Controller
+  - [x] Auth Service
+  - [x] Auth Middleware
+  - [x] Auth Validation
+### Like Endpoint
+  - [x] Like Controller
+  - [x] Like Service
+  - [x] Like Middleware
+  - [x] Like Validation 
+### Reply Endpoint
+  - [x] Reply Controller
+  - [x] Reply Service
+  - [x] Reply Middleware
+  - [x] Reply Validation
+### Thread Endpoint
+  - [x] Thread Controller
+  - [x] Thread Service
+  - [x] Thread Middleware
+  - [x] Thread Validation
+### User Endpoint
+  - [x] User Controller
+  - [x] User Service
+  - [x] User Middleware
+  - [x] User Validation
+### Utils & Middlewares
+- [x] Prisma ORM Setup
+- [x] Environment Variables (.env)
+- [x] Global Error Handler
+- [x] Logging System (Optional)
+- [x] CORS Config
+- [x] Swagger Docs
+- [x] Multer (Image Upload)
+- [x] Rate Limiting (Upstash)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
