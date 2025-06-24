@@ -3,6 +3,7 @@ import routes from './routes';
 import db from './utils/database';
 import docs from './docs/routes';
 import { errorHandler } from './middlewares/error.middleware';
+import corsMiddleware from './middlewares/cors.middleware';
 
 async function init() {
   try {
@@ -21,6 +22,7 @@ async function init() {
     });
 
     app.use(express.json());
+    app.use(corsMiddleware);
     app.use(routes);
     app.use(errorHandler);
     docs(app);

@@ -1,6 +1,5 @@
 import { CreateThreadDTO } from '../types/thread.dto';
 import { prisma } from '../prisma/client';
-
 class ThreadService {
   async getThreads(pagination?: { limit: number; startIndex: number }) {
     return await prisma.thread.findMany({
@@ -10,6 +9,7 @@ class ThreadService {
           include: { profile: true },
         },
         likes: true,
+        replies: true,
       },
       take: pagination?.limit,
       skip: pagination?.startIndex,
@@ -21,9 +21,19 @@ class ThreadService {
       where: { id },
       include: {
         user: {
+          omit: { password: true },
           include: { profile: true },
         },
-        replies: true,
+        likes: true,
+        replies: {
+          include: {
+            user: {
+              include: {
+                profile: true,
+              },
+            },
+          },
+        },
       },
     });
   }

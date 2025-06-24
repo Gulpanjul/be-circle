@@ -11,9 +11,27 @@ class UserController {
     /**
     #swagger.tags =['Users']
      */
-    const search = req.query.search as string;
     try {
-      const users = await UserService.getUsers(search);
+      const users = await UserService.getUsers();
+      res.status(200).json({
+        message: 'Users retrieved successfully',
+        data: users,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getUsersSearch(req: Request, res: Response, next: NextFunction) {
+    /**
+    #swagger.tags =['Users']
+     */
+    const q = req.query.search as string;
+    try {
+      if (!q.trim()) {
+        res.json({ message: 'no data' });
+        return;
+      }
+      const users = await UserService.getUsersSearch(q);
       res.status(200).json({
         message: 'Users retrieved successfully',
         data: users,
