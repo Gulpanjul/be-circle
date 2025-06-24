@@ -9,14 +9,14 @@ class UserService {
       },
     });
   }
-  async getUsersSearch(search?: string) {
-    if (search) {
+  async getUsersSearch(q?: string) {
+    if (q) {
       return await prisma.user.findMany({
         include: {
           profile: true,
         },
         where: {
-          OR: [{ username: { contains: search } }],
+          OR: [{ username: { contains: q } }],
         },
       });
     }

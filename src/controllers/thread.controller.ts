@@ -1,11 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-
-import { v2 as cloudinary } from 'cloudinary';
 import { Request, Response, NextFunction } from 'express';
+import streamifier from 'streamifier';
 
 import likeService from '../services/like.service';
 import threadService from '../services/thread.service';
+import cloudinary from '../utils/cloudinary';
 import { createThreadSchema } from '../validations/thread.validation';
 
 class ThreadController {
@@ -93,41 +91,44 @@ class ThreadController {
       description: 'Image file to upload'
     }
     */
-    const filePath: string = req.file?.path || '';
-    const folder = 'threads';
-    const publicId = `${folder}/${path.parse(filePath).name}`;
+    const userId = (req as any).user.id;
 
+    let imageUrl: string | undefined;
     try {
-      const userId = (req as any).user.id;
-      const validatedBody = await createThreadSchema.validateAsync(req.body);
-
-      const uploadResult = await cloudinary.uploader.upload(
-        req.file?.path || '',
-        { use_filename: true, unique_filename: false, folder: folder },
-      );
-
-      if (!uploadResult || !uploadResult.secure_url) {
-        res.status(500).json({
-          message: 'Upload is failed',
-          data: null,
+      if (req.file) {
+        imageUrl = await new Promise<string>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'threads',
+              use_filename: true,
+              unique_filename: false,
+            },
+            (error, result) => {
+              if (error) {
+                return reject(error);
+              }
+              resolve(result?.secure_url || '');
+            },
+          );
+          if (req.file?.buffer) {
+            streamifier.createReadStream(req.file.buffer).pipe(stream);
+          }
         });
-        return;
       }
 
-      const body = { ...validatedBody, images: uploadResult.secure_url };
+      const body = {
+        ...req.body,
+        images: imageUrl,
+      };
 
-      const thread = await threadService.createThread(userId, body);
-      if (filePath) fs.unlink(filePath, () => {});
-      res.status(200).json({
+      const validatedBody = await createThreadSchema.validateAsync(body);
+      const thread = await threadService.createThread(userId, validatedBody);
+
+      res.status(201).json({
         message: 'Thread created successfully',
         data: thread,
       });
     } catch (error) {
-      if (filePath && fs.existsSync(filePath)) {
-        fs.unlink(filePath, () => {});
-      }
-      cloudinary.uploader.destroy(publicId);
-      console.log(publicId);
       next(error);
     }
   }

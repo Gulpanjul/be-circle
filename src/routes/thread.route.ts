@@ -2,7 +2,6 @@ import express from 'express';
 
 import threadController from '../controllers/thread.controller';
 import { authenticate } from '../middlewares/auth.middleware';
-import { initCloudinary } from '../middlewares/cloudinary.middleware';
 import { uploadImage } from '../utils/multer';
 
 const router = express.Router();
@@ -12,7 +11,6 @@ router.get('/:id', threadController.getThreadById);
 router.post(
   '/',
   authenticate,
-  initCloudinary,
   uploadImage.single('images'),
   threadController.createThread,
 );
