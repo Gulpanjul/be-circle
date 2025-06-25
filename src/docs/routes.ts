@@ -1,17 +1,18 @@
 import { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import swaggerOutput from './swagger-output.json'; // ganti dengan path kamu jika berbeda
+import swaggerOutput from './swagger-output.json';
+import fs from 'fs';
+import path from 'path';
 
 export default function docs(app: Express) {
-  const css = `
-    .swagger-ui .topbar { display: none } 
-    .information-container.wrapper { background:rgb(0, 255, 60); padding: 2rem } 
-    .information-container .info { margin: 0 } 
-    .information-container .info .main { margin: 0 !important } 
-    .information-container .info .main .title { color: rgb(0, 0, 0) } 
-    .renderedMarkdown p { margin: 0 !important; color: rgb(0, 0, 0) !important }
-  `;
+  const css = fs.readFileSync(
+    path.resolve(
+      __dirname,
+      '../../node_modules/swagger-ui-dist/swagger-ui.css',
+    ),
+    'utf-8',
+  );
 
   app.use(
     '/api-docs',
