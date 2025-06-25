@@ -8,6 +8,16 @@ const doc = {
     title: 'Circle API',
     description: 'Welcome to Circle API!',
   },
+  servers: [
+    {
+      url: 'http://localhost:3001/',
+      description: 'Local Server',
+    },
+    {
+      url: 'https://gulpanjul-be-circle.vercel.app/',
+      description: 'Deploy Server',
+    },
+  ],
   components: {
     securitySchemes: {
       bearerAuth: {
@@ -76,7 +86,6 @@ const doc = {
       },
     },
   },
-  host: 'localhost:3001',
 };
 
 const outputFile = './swagger-output.json';
