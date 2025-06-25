@@ -18,7 +18,18 @@ export default function docs(app: Express) {
     '/api-docs',
     swaggerUi.serve,
     swaggerUi.setup(swaggerOutput, {
-      customCss: css,
+      customCss:
+        css +
+        `
+        .swagger-ui .topbar { display: none; }
+        .information-container.wrapper { background:#04A51E; padding:2rem; }
+        .information-container .info .main .title,
+        .swagger-ui .renderedMarkdown p,
+        .swagger-ui .info .description,
+        .swagger-ui .info {
+        color: white !important;
+      }
+      `,
       customSiteTitle: 'Circle App API',
       swaggerOptions: {
         persistAuthorization: true,
