@@ -126,8 +126,7 @@ class AuthController {
 
       res.status(200).json({
         message: 'Login success',
-        data: userResponse,
-        token: token,
+        data: { userResponse, token },
       });
     } catch (error) {
       next(error);
