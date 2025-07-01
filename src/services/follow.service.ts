@@ -21,7 +21,19 @@ class FollowService {
         followedId: userId,
       },
       include: {
-        following: true,
+        following: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            profile: {
+              select: {
+                fullName: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
       },
     });
     const followings = await prisma.follow.findMany({
@@ -33,12 +45,12 @@ class FollowService {
       },
     });
 
-    const followingsIds = followings.map((following) => following.followedId);
+    const followingsIds = followings.map((f) => f.followedId);
 
-    return followers.map((follower) => {
+    return followers.map((f) => {
       return {
-        ...follower,
-        isFollowed: followingsIds.includes(follower.following.id),
+        ...f,
+        isFollowed: followingsIds.includes(f.following.id),
       };
     });
   }
@@ -48,17 +60,30 @@ class FollowService {
         followingId: userId,
       },
       include: {
-        followed: true,
+        followed: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            profile: {
+              select: {
+                fullName: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
       },
     });
     const userFollowings = await prisma.follow.findMany({
       where: { followingId: currentUserId },
       select: { followedId: true },
     });
-    const followingsIds = followings.map((following) => following.followedId);
-    return followings.map((following) => ({
-      ...followings,
-      isFollowed: followingsIds.includes(following.followed.id),
+    const followingIds = userFollowings.map((f) => f.followedId);
+
+    return followings.map((f) => ({
+      ...f,
+      isFollowed: followingIds.includes(f.followed.id),
     }));
   }
 
