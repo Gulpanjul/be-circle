@@ -38,6 +38,20 @@ class ThreadService {
       },
     });
   }
+  async getThreadsByUserId(userId: string) {
+    return await prisma.thread.findMany({
+      where: { userId },
+      include: {
+        user: {
+          omit: { password: true },
+          include: { profile: true },
+        },
+        likes: true,
+        replies: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
   async createThread(userId: string, data: CreateThreadDTO) {
     const { content, images } = data;
     return await prisma.thread.create({

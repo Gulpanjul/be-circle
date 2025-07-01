@@ -95,6 +95,35 @@ class UserController {
       next(error);
     }
   }
+
+  async getUserByUsername(req: Request, res: Response, next: NextFunction) {
+    /**
+    #swagger.tags =['Users']
+     */
+    const { username } = req.params;
+    try {
+      const user = await userServices.getUserByUsername(username);
+
+      if (!user) {
+        res.status(404).json({
+          message: 'User not found',
+          data: null,
+        });
+        return;
+      }
+
+      res.status(200).json({
+        message: 'Users retrieved successfully',
+        data: {
+          ...user,
+          followersCount: user.followers?.length || 0,
+          followingsCount: user.followings?.length || 0,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   async createUser(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags =['Users']

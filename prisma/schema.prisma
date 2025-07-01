@@ -45,7 +45,7 @@ model Profile {
 model Thread {
   id      String @id @default(uuid())
   content String
-  images  String
+  images  String?
   userId  String
 
   user User @relation(fields: [userId], references: [id])

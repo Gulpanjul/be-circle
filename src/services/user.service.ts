@@ -39,6 +39,12 @@ class UserService {
       include: { profile: true },
     });
   }
+  async getUserByUsername(username: string) {
+    return await prisma.user.findUnique({
+      where: { username },
+      include: { profile: true, followers: true, followings: true },
+    });
+  }
   async getUpdateUserById(id: string) {
     return await prisma.user.findFirst({
       where: { id },

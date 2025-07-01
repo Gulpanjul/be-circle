@@ -72,6 +72,21 @@ class ThreadController {
       next(error);
     }
   }
+  async getThreadsByUserId(req: Request, res: Response, next: NextFunction) {
+    /**
+    #swagger.tags =['Threads']
+    */
+    const { id } = req.params;
+    try {
+      const threads = await threadService.getThreadsByUserId(id);
+      res.status(200).json({
+        message: 'Threads retrieved successfully',
+        data: threads,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   async createThread(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags = ['Threads']
