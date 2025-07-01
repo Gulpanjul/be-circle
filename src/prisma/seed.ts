@@ -2,6 +2,12 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.user.deleteMany();
+  await prisma.thread.deleteMany();
+  await prisma.like.deleteMany();
+  await prisma.reply.deleteMany();
+  await prisma.follow.deleteMany();
+  await prisma.profile.deleteMany();
   // Seed 4 Users
   const users = await Promise.all([
     prisma.user.create({

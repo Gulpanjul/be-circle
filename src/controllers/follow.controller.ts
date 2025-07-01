@@ -35,10 +35,7 @@ class FollowController {
     const userId = (req as any).user.id;
     const currentUserId = userId;
     try {
-      const followers = await followService.getFollowings(
-        userId,
-        currentUserId,
-      );
+      const followers = await followService.getFollowers(userId, currentUserId);
       res.status(200).json({
         status: 'success',
         code: 200,
