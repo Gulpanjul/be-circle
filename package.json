@@ -9,6 +9,9 @@
     "build": "tsc",
     "postinstall": "prisma generate && prisma migrate deploy"
   },
+  "prisma":{
+    "seed": "ts-node-dev src/prisma/seed.ts"
+  },
   "lint-staged": {
     "**/*.ts": [
       "prettier --write"
