@@ -15,7 +15,10 @@ class FollowController {
 
       if (follow) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'You cannot follow twice!',
+          data: [],
         });
         return;
       }
@@ -36,6 +39,7 @@ class FollowController {
     const currentUserId = userId;
     try {
       const followers = await followService.getFollowers(userId, currentUserId);
+
       res.status(200).json({
         status: 'success',
         code: 200,
@@ -54,6 +58,7 @@ class FollowController {
         userId,
         currentUserId,
       );
+
       res.status(200).json({
         status: 'success',
         code: 200,
@@ -72,7 +77,10 @@ class FollowController {
 
       if (!follow || follow.followingId !== followingId) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'Follow not found',
+          data: [],
         });
         return;
       }
@@ -94,9 +102,13 @@ class FollowController {
     next: NextFunction,
   ) {
     const { followedId } = req.params;
+
     if (!followedId) {
       res.status(400).json({
+        status: 'error',
+        code: 400,
         message: 'FollowedId is required',
+        data: [],
       });
     }
     try {

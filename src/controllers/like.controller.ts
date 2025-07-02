@@ -20,14 +20,18 @@ class LikeController {
 
       if (like) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'You cannot like thread twice!',
-          data: null,
+          data: [],
         });
         return;
       }
 
       const createLike = await likeService.createLike(userId, threadId);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Like success!',
         data: createLike,
       });
@@ -51,16 +55,20 @@ class LikeController {
 
       if (!like) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'Like not found!',
-          data: null,
+          data: [],
         });
         return;
       }
 
       await likeService.deleteLike(like.id);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'unlike success',
-        data: null,
+        data: [],
       });
     } catch (error) {
       next(error);

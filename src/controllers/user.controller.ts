@@ -15,6 +15,8 @@ class UserController {
     try {
       const users = await UserService.getUsers();
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users retrieved successfully',
         data: users,
       });
@@ -29,11 +31,20 @@ class UserController {
     const q = req.query.q as string;
     try {
       if (!q.trim()) {
-        res.json({ message: 'no data' });
+        res.status(400).json({
+          status: 'error',
+          code: 400,
+          message: 'no data',
+          data: [],
+        });
         return;
       }
+
       const users = await UserService.getUsersSearch(q);
+
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users retrieved successfully',
         data: users,
       });
@@ -49,14 +60,18 @@ class UserController {
     try {
       if (!id) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'Id is required',
-          data: null,
+          data: [],
         });
         return;
       }
 
       const user = await UserService.getUserById(id);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users retrieved successfully',
         data: user,
       });
@@ -71,8 +86,10 @@ class UserController {
     const { email } = req.params;
     if (!email) {
       res.status(400).json({
+        status: 'error',
+        code: 400,
         message: 'Email is required',
-        data: null,
+        data: [],
       });
       return;
     }
@@ -81,13 +98,17 @@ class UserController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'User not found',
-          data: null,
+          data: [],
         });
         return;
       }
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users retrieved successfully',
         data: user,
       });
@@ -106,13 +127,17 @@ class UserController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'User not found',
-          data: null,
+          data: [],
         });
         return;
       }
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users retrieved successfully',
         data: {
           ...user,
@@ -134,6 +159,8 @@ class UserController {
       const user = await UserService.createUser(validatedBody);
 
       res.status(201).json({
+        status: 'success',
+        code: 201,
         message: 'User created successfully',
         data: user,
       });
@@ -152,7 +179,10 @@ class UserController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'User not found',
+          data: [],
         });
         return;
       }
@@ -170,6 +200,8 @@ class UserController {
       const updatedUser = await userServices.updateUserById(id, user);
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Users updated successfully',
         data: updatedUser,
       });
@@ -183,8 +215,10 @@ class UserController {
     */
     const { id } = req.params;
     try {
-      const user = await userServices.deleteUserById(id);
+      await userServices.deleteUserById(id);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'User deleted successfully',
         data: null,
       });

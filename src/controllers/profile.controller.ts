@@ -13,12 +13,16 @@ class ProfileController {
       const profile = await profileService.getUserProfileById(id);
       if (!profile) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'Profile not found',
-          data: null,
+          data: [],
         });
         return;
       }
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Profile retrieved successfully',
         data: profile,
       });

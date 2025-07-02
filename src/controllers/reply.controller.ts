@@ -9,6 +9,8 @@ class ReplyController {
     try {
       const replies = await replyService.getRepliesByThreadId(threadId);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'success to fetch data',
         data: replies,
       });
@@ -28,6 +30,8 @@ class ReplyController {
         validatedBody,
       );
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Reply created!',
         data: { ...reply },
       });

@@ -5,6 +5,7 @@ import likeService from '../services/like.service';
 import threadService from '../services/thread.service';
 import cloudinary from '../utils/cloudinary';
 import { createThreadSchema } from '../validations/thread.validation';
+import { stat } from 'fs';
 
 class ThreadController {
   async getThreads(req: Request, res: Response, next: NextFunction) {
@@ -35,6 +36,8 @@ class ThreadController {
         }),
       );
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Threads retrieved successfully',
         data: newThreads,
       });
@@ -53,8 +56,10 @@ class ThreadController {
 
       if (!thread) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'Thread not found!',
-          data: null,
+          data: [],
         });
         return;
       }
@@ -65,6 +70,8 @@ class ThreadController {
       const repliesCount = thread.replies.length;
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Threads retrieved successfully',
         data: { ...thread, likesCount, repliesCount, isLiked },
       });
@@ -80,6 +87,8 @@ class ThreadController {
     try {
       const threads = await threadService.getThreadsByUserId(id);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Threads retrieved successfully',
         data: threads,
       });
@@ -140,6 +149,8 @@ class ThreadController {
       const thread = await threadService.createThread(userId, validatedBody);
 
       res.status(201).json({
+        status: 'success',
+        code: 201,
         message: 'Thread created successfully',
         data: thread,
       });

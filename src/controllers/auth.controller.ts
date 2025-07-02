@@ -63,6 +63,8 @@ class AuthController {
       const user = await authServices.register(registerBody);
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Register Success',
         data: { ...user },
       });
@@ -104,8 +106,10 @@ class AuthController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'Email is wrong',
-          data: null,
+          data: [],
         });
         return;
       }
@@ -114,8 +118,10 @@ class AuthController {
 
       if (!isPasswordMatch) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'Password is wrong!',
-          data: null,
+          data: [],
         });
         return;
       }
@@ -125,6 +131,8 @@ class AuthController {
       const { password: unusedPassword, ...userResponse } = user;
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Login success',
         data: { userResponse, token },
       });
@@ -143,7 +151,10 @@ class AuthController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'User not found!',
+          data: [],
         });
         return;
       }
@@ -151,6 +162,8 @@ class AuthController {
       const { password: unusedPassword, ...userResponse } = user;
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Authentication successful',
         data: { ...userResponse },
       });
@@ -201,6 +214,8 @@ class AuthController {
 
       await transporter.sendMail(mailOptions);
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Forgot password link sent!',
         data: email,
       });
@@ -241,8 +256,10 @@ class AuthController {
 
     if (!payload?.email) {
       res.status(400).json({
+        status: 'error',
+        code: 400,
         message: 'Invalid token payload',
-        data: null,
+        data: [],
       });
       return;
     }
@@ -252,7 +269,10 @@ class AuthController {
 
       if (oldPassword === newPassword) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'Password cannot be the same as previous',
+          data: [],
         });
         return;
       }
@@ -261,8 +281,10 @@ class AuthController {
 
       if (!user) {
         res.status(404).json({
+          status: 'error',
+          code: 404,
           message: 'User not found!',
-          data: null,
+          data: [],
         });
         return;
       }
@@ -274,8 +296,10 @@ class AuthController {
 
       if (!isOldPasswordCorrect) {
         res.status(400).json({
+          status: 'error',
+          code: 400,
           message: 'Old password is not correct!',
-          data: null,
+          data: [],
         });
         return;
       }
@@ -285,6 +309,8 @@ class AuthController {
         await authServices.resetPassword(user.email, hashedNewPassword);
 
       res.status(200).json({
+        status: 'success',
+        code: 200,
         message: 'Reset password success!',
         data: { ...updatedUserPassword },
       });

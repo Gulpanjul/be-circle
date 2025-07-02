@@ -26,8 +26,10 @@ export function rateLimit(identifier: string) {
 
     if (!success) {
       res.status(429).json({
+        status: 'error',
+        code: 429,
         message: 'Too many requests',
-        data: null,
+        data: [],
       });
       return;
     }

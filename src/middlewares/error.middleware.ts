@@ -10,21 +10,27 @@ export function errorHandler(
 ) {
   if (err instanceof Joi.ValidationError) {
     res.status(400).json({
+      status: 'error',
+      code: 400,
       message: err.details[0].message,
-      data: null,
+      data: [],
     });
     return;
   }
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     res.status(400).json({
+      status: 'error',
+      code: 400,
       message: err.message,
-      data: null,
+      data: [],
     });
     return;
   }
 
   res.status(500).json({
+    status: 'error',
+    code: 500,
     message: `Internal Server Error! Error: ${JSON.stringify(err)}`,
-    data: null,
+    data: [],
   });
 }

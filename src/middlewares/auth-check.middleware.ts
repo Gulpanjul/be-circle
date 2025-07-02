@@ -20,6 +20,8 @@ export function authCheck(req: Request, res: Response, next: NextFunction) {
 
   if (!user) {
     res.status(401).json({
+      status: 'error',
+      code: 401,
       message: 'Unauthorized!',
       data: null,
     });
