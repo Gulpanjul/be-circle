@@ -30,6 +30,7 @@ class FollowService {
               select: {
                 fullName: true,
                 avatarUrl: true,
+                bio: true,
               },
             },
           },
@@ -69,6 +70,7 @@ class FollowService {
               select: {
                 fullName: true,
                 avatarUrl: true,
+                bio: true,
               },
             },
           },
