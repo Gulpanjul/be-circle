@@ -30,7 +30,10 @@ export function errorHandler(
   res.status(500).json({
     status: 'error',
     code: 500,
-    message: `Internal Server Error! Error: ${JSON.stringify(err)}`,
+    message:
+      err instanceof Error
+        ? `Internal Server Error! ${err.message}`
+        : `Internal Server Error! ${JSON.stringify(err)}`,
     data: [],
   });
 }

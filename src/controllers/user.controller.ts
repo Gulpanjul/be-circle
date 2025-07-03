@@ -29,6 +29,7 @@ class UserController {
     /**
     #swagger.tags =['Users']
      */
+    const currentUser = (req as any).user;
     const q = req.query.q as string;
     try {
       if (!q.trim()) {
@@ -41,7 +42,7 @@ class UserController {
         return;
       }
 
-      const users = await UserService.getUsersSearch(q);
+      const users = await UserService.getUsersSearch(q, currentUser.id);
 
       res.status(200).json({
         status: 'success',
