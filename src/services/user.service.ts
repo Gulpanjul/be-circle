@@ -6,6 +6,11 @@ class UserService {
     return await prisma.user.findMany({
       include: {
         profile: true,
+        followers: true,
+        followings: true,
+      },
+      omit: {
+        password: true, // Exclude password from the response
       },
     });
   }
@@ -30,6 +35,11 @@ class UserService {
       where: { id },
       include: {
         profile: true,
+        followers: true,
+        followings: true,
+      },
+      omit: {
+        password: true, // Exclude password from the response
       },
     });
   }
@@ -42,7 +52,14 @@ class UserService {
   async getUserByUsername(username: string) {
     return await prisma.user.findUnique({
       where: { username },
-      include: { profile: true, followers: true, followings: true },
+      include: {
+        profile: true,
+        followers: true,
+        followings: true,
+      },
+      omit: {
+        password: true, // Exclude password from the response
+      },
     });
   }
   async getUpdateUserById(id: string) {

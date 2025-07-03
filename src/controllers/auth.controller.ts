@@ -62,11 +62,13 @@ class AuthController {
 
       const user = await authServices.register(registerBody);
 
+      const { password, ...safeUser } = user;
+
       res.status(200).json({
         status: 'success',
         code: 200,
         message: 'Register Success',
-        data: { ...user },
+        data: safeUser,
       });
     } catch (error) {
       next(error);
@@ -159,13 +161,11 @@ class AuthController {
         return;
       }
 
-      const { password: unusedPassword, ...userResponse } = user;
-
       res.status(200).json({
         status: 'success',
         code: 200,
         message: 'Authentication successful',
-        data: { ...userResponse },
+        data: user,
       });
     } catch (error) {
       next(error);

@@ -44,11 +44,13 @@ class ProfileController {
         validatedBody,
       );
 
+      const { password, ...safeProfile } = updatedProfile;
+
       res.status(200).json({
         status: 'success',
         code: 200,
         message: 'Profile updated successfully',
-        data: updatedProfile,
+        data: safeProfile,
       });
     } catch (error) {
       next(error);

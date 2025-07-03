@@ -14,6 +14,7 @@ class UserController {
      */
     try {
       const users = await UserService.getUsers();
+
       res.status(200).json({
         status: 'success',
         code: 200,
@@ -69,6 +70,7 @@ class UserController {
       }
 
       const user = await UserService.getUserById(id);
+
       res.status(200).json({
         status: 'success',
         code: 200,
@@ -158,11 +160,13 @@ class UserController {
       const validatedBody = await createUserSchema.validateAsync(body);
       const user = await UserService.createUser(validatedBody);
 
+      const { password, ...safeUser } = user;
+
       res.status(201).json({
         status: 'success',
         code: 201,
         message: 'User created successfully',
-        data: user,
+        data: safeUser,
       });
     } catch (error) {
       next(error);
@@ -199,11 +203,13 @@ class UserController {
 
       const updatedUser = await userServices.updateUserById(id, user);
 
+      const { password, ...safeUser } = updatedUser;
+
       res.status(200).json({
         status: 'success',
         code: 200,
         message: 'Users updated successfully',
-        data: updatedUser,
+        data: safeUser,
       });
     } catch (error) {
       next(error);
