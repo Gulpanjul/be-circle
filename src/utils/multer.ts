@@ -10,7 +10,9 @@ export const uploadImage = multer({
     if (!whitelist.includes(file.mimetype)) {
       return cb(new Error('file is not allowed'));
     }
-
     cb(null, true);
+  },
+  limits: {
+    fileSize: 1024 * 1024 * 5, // 5MB
   },
 });

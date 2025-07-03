@@ -11,7 +11,7 @@ router.get('/:id', profileController.getUserProfileById);
 router.patch(
   '/:id',
   authenticate,
-  uploadImage.single('images'),
+  uploadImage.single('avatar'),
   profileController.updateUserProfile,
 );
 

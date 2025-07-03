@@ -12,4 +12,14 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
+export function extractCloudinaryPublicId(url: string): string | null {
+  try {
+    const regex = /\/upload\/(?:v\d+\/)?([^\.]+)\./; // cocokkan path setelah /upload/
+    const match = url.match(regex);
+    return match ? match[1] : null; // contoh: 'avatars/username'
+  } catch {
+    return null;
+  }
+}
+
 export default cloudinary;

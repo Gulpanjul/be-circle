@@ -1,4 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+import streamifier from 'streamifier';
+
+import cloudinary, { extractCloudinaryPublicId } from '../utils/cloudinary';
 import profileService from '../services/profile.service';
 import { updateProfileSchema } from '../validations/profile.validation';
 
@@ -36,14 +39,52 @@ class ProfileController {
          #swagger.security = [{ bearerAuth: [] }]
          */
     const { id } = (req as any).user;
-    const data = { ...req.body, avatarUrl: req.body.avatarUrl || '' };
+
     try {
+      const data = {
+        ...req.body,
+        avatarUrl: req.body.avatarUrl || '',
+      };
+
       const validatedBody = await updateProfileSchema.validateAsync(data);
+      const { username } = validatedBody;
+
+      const existingProfile = await profileService.getUserProfileById(id);
+      const oldAvatarUrl = existingProfile?.avatarUrl;
+
+      if (req.file) {
+        if (oldAvatarUrl) {
+          const publicId = extractCloudinaryPublicId(oldAvatarUrl);
+          if (publicId) {
+            await cloudinary.uploader.destroy(publicId);
+          }
+        }
+
+        const buffer = req.file.buffer;
+        const newAvatarUrl = await new Promise<string>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'avatars',
+              public_id: username,
+              overwrite: true,
+              resource_type: 'image',
+            },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result?.secure_url || '');
+            },
+          );
+
+          streamifier.createReadStream(buffer).pipe(stream);
+        });
+
+        validatedBody.avatarUrl = newAvatarUrl;
+      }
+
       const updatedProfile = await profileService.updateUserProfile(
         id,
         validatedBody,
       );
-
       const { password, ...safeProfile } = updatedProfile;
 
       res.status(200).json({

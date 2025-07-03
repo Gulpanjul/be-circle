@@ -5,7 +5,6 @@ import likeService from '../services/like.service';
 import threadService from '../services/thread.service';
 import cloudinary from '../utils/cloudinary';
 import { createThreadSchema } from '../validations/thread.validation';
-import { stat } from 'fs';
 
 class ThreadController {
   async getThreads(req: Request, res: Response, next: NextFunction) {
