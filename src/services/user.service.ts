@@ -31,6 +31,21 @@ class UserService {
       include: { profile: true },
     });
   }
+  async getSuggestedUsers(currentUserId: string, limit: number) {
+    return prisma.user.findMany({
+      take: limit,
+      where: {
+        id: { not: currentUserId },
+      },
+      include: {
+        profile: true,
+      },
+      orderBy: {
+        createdAt: 'desc', // bisa kamu ganti dengan logic rekomendasi
+      },
+    });
+  }
+
   async getUserById(id: string) {
     return await prisma.user.findFirst({
       where: { id },

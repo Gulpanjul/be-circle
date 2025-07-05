@@ -54,6 +54,26 @@ class UserController {
       next(error);
     }
   }
+  async getSuggestedUsers(req: Request, res: Response, next: NextFunction) {
+    /**
+     * #swagger.tags = ['Users']
+     */
+    const currentUser = (req as any).user;
+
+    try {
+      const users = await UserService.getSuggestedUsers(currentUser.id, 5);
+
+      res.status(200).json({
+        status: 'success',
+        code: 200,
+        message: 'Suggested users fetched',
+        data: users,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getUserById(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags =['Users']

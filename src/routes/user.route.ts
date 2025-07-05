@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/', UserController.getUsers);
 router.get('/search', authenticate, UserController.getUsersSearch);
+router.get('/suggested', authenticate, UserController.getSuggestedUsers);
 router.get('/:id', UserController.getUserById);
 router.get('/email/:email', UserController.getUserByEmail);
 router.get('/username/:username', UserController.getUserByUsername);
