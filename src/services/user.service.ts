@@ -40,6 +40,9 @@ class UserService {
       include: {
         profile: true,
       },
+      omit: {
+        password: true,
+      },
     });
 
     const shuffledIds = allUsers
