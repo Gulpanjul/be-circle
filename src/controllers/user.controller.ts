@@ -25,6 +25,7 @@ class UserController {
       next(error);
     }
   }
+
   async getUsersSearch(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags =['Users']
@@ -139,7 +140,6 @@ class UserController {
       next(error);
     }
   }
-
   async getUserByUsername(req: Request, res: Response, next: NextFunction) {
     /**
     #swagger.tags =['Users']

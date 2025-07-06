@@ -32,7 +32,7 @@ class UserService {
     });
   }
   async getSuggestedUsers(currentUserId: string, limit: number) {
-    return prisma.user.findMany({
+    const allUsers = await prisma.user.findMany({
       take: limit,
       where: {
         id: { not: currentUserId },
@@ -40,8 +40,19 @@ class UserService {
       include: {
         profile: true,
       },
-      orderBy: {
-        createdAt: 'desc', // bisa kamu ganti dengan logic rekomendasi
+    });
+
+    const shuffledIds = allUsers
+      .map((u) => u.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, limit);
+
+    return prisma.user.findMany({
+      where: {
+        id: { in: shuffledIds },
+      },
+      include: {
+        profile: true,
       },
     });
   }
