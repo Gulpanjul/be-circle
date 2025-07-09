@@ -32,7 +32,7 @@ class UserService {
     });
   }
   async getSuggestedUsers(currentUserId: string, limit: number) {
-    return prisma.user.findMany({
+    const users = await prisma.user.findMany({
       take: limit,
       where: {
         id: { not: currentUserId },
@@ -41,9 +41,33 @@ class UserService {
         profile: true,
       },
       orderBy: {
-        createdAt: 'desc', // bisa kamu ganti dengan logic rekomendasi
+        createdAt: 'desc',
       },
     });
+
+    if (!users || users.length === 0) return [];
+
+    // Ambil semua ID user yang ingin dicek apakah di-follow
+    const userIds = users.map((u) => u.id);
+
+    // Ambil daftar yang sudah di-follow oleh current user
+    const follows = await prisma.follow.findMany({
+      where: {
+        followedId: { in: userIds },
+        followingId: currentUserId,
+      },
+      select: {
+        followedId: true,
+      },
+    });
+
+    const followedIds = new Set(follows.map((f) => f.followedId));
+
+    // Hapus password & tambahkan isFollowed
+    return users.map(({ password, ...user }) => ({
+      ...user,
+      isFollowed: followedIds.has(user.id),
+    }));
   }
 
   async getUserById(id: string) {
@@ -65,19 +89,38 @@ class UserService {
       include: { profile: true },
     });
   }
-  async getUserByUsername(username: string) {
-    return await prisma.user.findUnique({
+  async getUserByUsername(username: string, currentUserId: string) {
+    const user = await prisma.user.findUnique({
       where: { username },
       include: {
         profile: true,
-        followers: true,
-        followings: true,
-      },
-      omit: {
-        password: true, // Exclude password from the response
+        _count: {
+          select: {
+            followers: true,
+            followings: true,
+          },
+        },
       },
     });
+
+    if (!user) return null;
+
+    const isFollowed = await prisma.follow.findFirst({
+      where: {
+        followedId: user.id,
+        followingId: currentUserId,
+      },
+      select: { id: true },
+    });
+
+    return {
+      ...user,
+      followersCount: user._count.followers,
+      followingsCount: user._count.followings,
+      isFollowed: !!isFollowed,
+    };
   }
+
   async getUpdateUserById(id: string) {
     return await prisma.user.findFirst({
       where: { id },

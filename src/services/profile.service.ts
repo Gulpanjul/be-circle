@@ -14,6 +14,33 @@ class ProfileService {
       },
     });
   }
+  async getUserFollowedById(id: string, currentUserId: string) {
+    const profile = await prisma.profile.findFirst({
+      where: { userId: id },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+    if (!profile) return null;
+
+    // cek apakah currentUser sudah follow user target
+    const follow = await prisma.follow.findFirst({
+      where: {
+        followedId: id,
+        followingId: currentUserId,
+      },
+    });
+
+    return {
+      ...profile,
+      user: profile.user,
+      isFollowed: !!follow,
+    };
+  }
   async updateUserProfile(id: string, data: updatedUserProfileDTO) {
     const { fullName, username, bio, avatarUrl } = data;
 

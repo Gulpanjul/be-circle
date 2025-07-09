@@ -145,8 +145,13 @@ class UserController {
     #swagger.tags =['Users']
      */
     const { username } = req.params;
+    const currentUser = (req as any).user;
+    const currentUserId = currentUser?.id;
     try {
-      const user = await userServices.getUserByUsername(username);
+      const user = await userServices.getUserByUsername(
+        username,
+        currentUserId,
+      );
 
       if (!user) {
         res.status(404).json({
@@ -162,11 +167,7 @@ class UserController {
         status: 'success',
         code: 200,
         message: 'Users retrieved successfully',
-        data: {
-          ...user,
-          followersCount: user.followers?.length || 0,
-          followingsCount: user.followings?.length || 0,
-        },
+        data: user,
       });
     } catch (error) {
       next(error);
