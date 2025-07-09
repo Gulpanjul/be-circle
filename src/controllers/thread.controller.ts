@@ -62,7 +62,6 @@ class ThreadController {
         });
         return;
       }
-
       const like = await likeService.getLikeById(userId, thread.id);
       const isLiked = like ? true : false;
       const likesCount = thread.likes.length;
@@ -82,14 +81,41 @@ class ThreadController {
     /**
     #swagger.tags =['Threads']
     */
-    const { id } = req.params;
+    const { userId } = req.params;
+    const authUserId = (req as any).user?.id; // id user yang login (untuk isLiked)
+
     try {
-      const threads = await threadService.getThreadsByUserId(id);
+      const threads = await threadService.getThreadsByUserId(userId);
+
+      if (!threads || threads.length === 0) {
+        res.status(404).json({
+          status: 'error',
+          code: 404,
+          message: 'Thread not found!',
+          data: [],
+        });
+        return;
+      }
+
+      // Tambahkan likesCount, repliesCount, isLiked
+      const enrichedThreads = threads.map((thread) => {
+        const likesCount = thread.likes.length;
+        const repliesCount = thread.replies.length;
+        const isLiked = thread.likes.some((like) => like.userId === authUserId);
+
+        return {
+          ...thread,
+          likesCount,
+          repliesCount,
+          isLiked,
+        };
+      });
+
       res.status(200).json({
         status: 'success',
         code: 200,
         message: 'Threads retrieved successfully',
-        data: threads,
+        data: enrichedThreads,
       });
     } catch (error) {
       next(error);

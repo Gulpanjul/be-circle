@@ -43,13 +43,19 @@ class ThreadService {
       where: { userId },
       include: {
         user: {
-          omit: { password: true },
           include: { profile: true },
         },
         likes: true,
-        replies: true,
+        replies: {
+          include: {
+            user: {
+              include: {
+                profile: true,
+              },
+            },
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' },
     });
   }
   async createThread(userId: string, data: CreateThreadDTO) {
